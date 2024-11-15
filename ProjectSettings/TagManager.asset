@@ -3,12 +3,27 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - QDSUIBorderlessButton
+  - QDSUITooltip
+  - QDSUISecondaryButton
+  - QDSUIToggleButton
+  - QDSUIToggleBorderlessButton
+  - QDSUIIcon
+  - QDSUISharedThemeColor
+  - QDSUITextSecondaryColor
+  - Locomotion
+  - PassThrough
+  - PassThroughButton
+  - LocoButton
+  - LocoText
+  - QDSUIAccentColor
+  - SamplesInfoPanel
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - foll
   - Water
   - UI
   - 
@@ -40,4 +55,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: foll
+    uniqueID: 2329000953
     locked: 0
