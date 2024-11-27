@@ -2,14 +2,11 @@ using Oculus.Interaction.HandGrab;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
+using UnityEngine.InputSystem;  // Подключаем Input System
 
 namespace Oculus.Interaction
 {
-    /// <summary>
-    /// SnapInteractables provide Pose targets for SnapInteractors to translate and rotate towards.
-    /// </summary>
-    public class SnapInteractable2 : Interactable<SnapInteractor, SnapInteractable>,
-        IRigidbodyRef
+    public class SnapInteractable2 : Interactable<SnapInteractor, SnapInteractable>, IRigidbodyRef
     {
         [SerializeField]
         private Rigidbody _rigidbody;
@@ -27,6 +24,11 @@ namespace Oculus.Interaction
 
         private static CollisionInteractionRegistry<SnapInteractor, SnapInteractable> _registry = null;
 
+        private InputAction moveAction;
+        private InputAction buttonAction;
+
+        private InputActionMap inputActionMap; // InputActionMap для обработки действий
+
         #region Editor events
         private void Reset()
         {
@@ -39,6 +41,20 @@ namespace Oculus.Interaction
             base.Awake();
             MovementProvider = _movementProvider as IMovementProvider;
             SnapPoseDelegate = _snapPoseDelegate as ISnapPoseDelegate;
+
+            // Инициализация InputActionAsset
+            var inputActionAsset = new InputActionAsset();
+
+            // Создаем новый InputActionMap
+            inputActionMap = inputActionAsset.AddActionMap("PlayerActions");
+
+            // Добавляем действия в этот InputActionMap
+            moveAction = inputActionMap.AddAction("Move", binding: "<Gamepad>/leftStick");
+            buttonAction = inputActionMap.AddAction("ButtonPress", binding: "<XRController>/button1");
+
+            // Включаем действия
+            moveAction.Enable();
+            buttonAction.Enable();
         }
 
         protected override void Start()
@@ -94,9 +110,6 @@ namespace Oculus.Interaction
             }
         }
 
-        /// <summary>
-        /// Moves the tracked element using the <cref="ISnapPoseDelegate" />.
-        /// </summary>
         public void InteractorHoverUpdated(SnapInteractor interactor)
         {
             if (SnapPoseDelegate != null)
@@ -105,21 +118,14 @@ namespace Oculus.Interaction
             }
         }
 
-        /// <summary>
-        /// Sets the pose for the interactor.
-        /// <param name="interactor">The SnapInteractor object.</param>
-        /// <param name="result">The resulting pose.</param>
-        /// </summary>
         public bool PoseForInteractor(SnapInteractor interactor, out Pose result)
         {
             if (SnapPoseDelegate != null)
             {
                 if (SnapPoseDelegate.SnapPoseForElement(interactor.Identifier, interactor.SnapPose, out result))
                 {
-                    // Проверяем, чтобы позиция не совпала с текущей
                     if (result.position == transform.position)
                     {
-                        // Если позиция совпадает с текущей, пытаемся найти другую позицию
                         result.position = FindAlternativePosition();
                     }
                     return true;
@@ -132,16 +138,9 @@ namespace Oculus.Interaction
 
         private Vector3 FindAlternativePosition()
         {
-            // Реализуем логику для поиска альтернативной позиции
-            // Например, сдвигаем позицию на 1 юнит вперед
-            return transform.position + Vector3.forward; 
+            return transform.position + Vector3.forward;
         }
 
-        /// <summary>
-        /// Generates a movement that when applied will move the interactor from a start to a target pose.
-        /// <param name="from">The starting position of the interactor.</param>
-        /// <param name="interactor">The interactor to move.</param>
-        /// </summary>
         public IMovement GenerateMovement(in Pose from, SnapInteractor interactor)
         {
             if (PoseForInteractor(interactor, out Pose to))
@@ -156,34 +155,22 @@ namespace Oculus.Interaction
 
         #region Inject
 
-        /// <summary>
-        /// Sets all required values for a snap interactable to a dynamically instantiated GameObject.
-        /// </summary>
         public void InjectAllSnapInteractable(Rigidbody rigidbody)
         {
             InjectRigidbody(rigidbody);
         }
 
-        /// <summary>
-        /// Sets a Rigidbody on a dynamically instantiated GameObject.
-        /// </summary>
         public void InjectRigidbody(Rigidbody rigidbody)
         {
             _rigidbody = rigidbody;
         }
 
-        /// <summary>
-        /// Sets a movement provider on a dynamically instantiated GameObject.
-        /// </summary>
         public void InjectOptionalMovementProvider(IMovementProvider provider)
         {
             _movementProvider = provider as UnityEngine.Object;
             MovementProvider = provider;
         }
 
-        /// <summary>
-        /// Sets a snap pose delegate on a dynamically instantiated GameObject.
-        /// </summary>
         public void InjectOptionalSnapPoseDelegate(ISnapPoseDelegate snapPoseDelegate)
         {
             _snapPoseDelegate = snapPoseDelegate as UnityEngine.Object;
