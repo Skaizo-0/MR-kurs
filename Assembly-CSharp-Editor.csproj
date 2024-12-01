@@ -60,7 +60,15 @@
     <Analyzer Include="D:\unity\2022.3.44f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\blockworks-demo\Assets\ElasticSea\Framework\Scripts\Util\Editor\SceneList.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Editor\ReadmeEditor.cs" />
+    <Compile Include="Assets\blockworks-demo\Assets\_Project\Scripts\Sandbox\Editor\ChunkSpawnerEditor.cs" />
+    <Compile Include="Assets\blockworks-demo\Assets\_Project\Scripts\Blocks\Builder\Editor\ChunkSnapperEditor.cs" />
+    <Compile Include="Assets\blockworks-demo\Assets\_Project\Scripts\Blocks\Templates\Editor\TemplateFactoryEditor.cs" />
+    <Compile Include="Assets\blockworks-demo\Assets\ElasticSea\Framework\Scripts\Util\PropertyDrawers\Editor\CustomObjectPickerPropertyDrawer.cs" />
+    <Compile Include="Assets\blockworks-demo\Assets\ElasticSea\Framework\Tests\Editor\Extensions\FloatExtensionsTests.cs" />
+    <Compile Include="Assets\blockworks-demo\Assets\ElasticSea\Framework\Scripts\Util\PropertyDrawers\Editor\CustomObjectPickerEditorWindow.cs" />
+    <Compile Include="Assets\blockworks-demo\Assets\ElasticSea\Framework\Scripts\Util\Editor\QuickActions.cs" />
     <Compile Include="Assets\PROMETEO - Car Controller\Editor\PrometeoEditor.cs" />
   </ItemGroup>
   <ItemGroup>
